@@ -32,7 +32,21 @@ describe 'As a user, When I go to a mechanics show page' do
 
         expect(current_path).to eq("/mechanics/#{mechanic.id}")
         expect(page).to have_content(ride_2.name)
-        
+      end
+      it 'ride not found' do
+        mechanic = Mechanic.create(name: 'Sal', experience: 5)
+        amusement_park = AmusementPark.create(name: 'Turing Land', admission: 27.95)
+        ride_1 = Ride.create(name: 'Ruby Coaster', thrill: 10, amusement_park_id: amusement_park.id)
+        ride_2 = Ride.create(name: 'Java Coaster', thrill: 1, amusement_park_id: amusement_park.id)
+
+        RideMechanic.create(ride_id: ride_1.id, mechanic_id: mechanic.id)
+        visit "mechanics/#{mechanic.id}"
+
+        fill_in 'mechanic[ride]', with: "Not Real"
+        click_button 'Add Ride'
+
+        expect(current_path).to eq("/mechanics/#{mechanic.id}")
+        expect(page).to have_content("Ride not added: Ride not found.")
       end
     end
   end
