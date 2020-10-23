@@ -3,3 +3,8 @@
 <% @mechanic.rides.each do |ride| %>
   <p><%= ride.name %></p>
 <% end %>
+
+<%= form_tag("/mechanics/#{@mechanic.id}/rides", method: 'post') do %>
+        <%= text_field_tag('mechanic[ride]') %>
+        <%= submit_tag("Add Ride") %>
+<% end %>
